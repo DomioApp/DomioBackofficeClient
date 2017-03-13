@@ -13,12 +13,12 @@ class ProfilePageModel {
             ..['price_per_month'] = price_per_month;
 }
 
-class DashboardPage implements Page {
+class BackofficeApp implements Page {
     ButtonElement getUsersLink;
     DivElement mainArea;
     ProfilePageModel model;
 
-    DashboardPage() {
+    BackofficeApp() {
         init();
         bindElements();
         bindEvents();
