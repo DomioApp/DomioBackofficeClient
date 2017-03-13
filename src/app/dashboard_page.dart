@@ -1,7 +1,7 @@
 import 'dart:html';
 import 'api_connector.dart';
 import 'page.dart';
-import 'config.dart';
+import 'dart:convert';
 
 class ProfilePageModel {
     String name;
@@ -58,8 +58,11 @@ class DashboardPage implements Page {
 
         HttpRequest request = await getRequest('/users', null);
 
-        window.console.log(request.response);
+        mainArea.setInnerHtml(loadUsersUi(JSON.decode(request.response)));
+    }
 
-        mainArea.setInnerHtml(request.response);
+    String loadUsersUi(List users) {
+        var a = users.map((user) => '<div>${user['email']}</div>');
+        return a.join('');
     }
 }
