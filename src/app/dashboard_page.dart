@@ -13,11 +13,12 @@ class ProfilePageModel {
             ..['price_per_month'] = price_per_month;
 }
 
-class ProfilePage implements Page {
-    ButtonElement deleteAccountButton;
+class DashboardPage implements Page {
+    ButtonElement getUsersLink;
+    DivElement mainArea;
     ProfilePageModel model;
 
-    ProfilePage() {
+    DashboardPage() {
         init();
         bindElements();
         bindEvents();
@@ -29,11 +30,12 @@ class ProfilePage implements Page {
     }
 
     bindElements() {
-        deleteAccountButton = querySelector('.b-delete-account-button');
+        getUsersLink = querySelector('.b-top-bar-container a[href="/users"]');
+        mainArea = querySelector('.b-profile-main-area-container');
     }
 
     bindEvents() {
-        deleteAccountButton.onClick.listen(deleteAccount);
+        getUsersLink.onClick.listen(getUsers);
     }
 
     updateModel(Event event) {
@@ -50,19 +52,14 @@ class ProfilePage implements Page {
         }
     }
 
-    deleteAccount(Event event) async {
+    getUsers(Event event) async {
         event.preventDefault();
         event.stopPropagation();
 
-        ButtonElement button = event.target;
-
-        HttpRequest request = await deleteRequest('/user', null);
+        HttpRequest request = await getRequest('/users', null);
 
         window.console.log(request.response);
 
-        if (request.readyState == HttpRequest.DONE &&
-            (request.status == 200 || request.status == 0)) {
-            window.location.assign('${siteUrl}/logout');
-        }
+        mainArea.setInnerHtml(request.response);
     }
 }

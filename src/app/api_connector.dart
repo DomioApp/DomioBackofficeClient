@@ -28,6 +28,34 @@ class Token {
     }
 }
 
+getRequest(String url, model) async {
+    HttpRequest request = new HttpRequest();
+
+    request.withCredentials = true;
+
+
+    var fullUrl = '${apiUrl}${url}';
+
+    request.open('GET', fullUrl);
+
+    request.setRequestHeader('Content-Type', 'application/json');
+
+
+    if (window.localStorage['token'] != null) {
+        request.setRequestHeader(
+            'Authorization', 'Bearer ${window.localStorage['token']}');
+    }
+
+
+    String jsonData = JSON.encode(model);
+
+    request.send(jsonData);
+
+    await request.onLoadEnd.first;
+
+    return request;
+}
+
 postRequest(String url, model) async {
     HttpRequest request = new HttpRequest();
 

@@ -4,7 +4,7 @@ import 'dart:html';
 import 'add_domain_page.dart';
 import 'login_page.dart';
 import 'signup_page.dart';
-import 'profile_page.dart';
+import 'dashboard_page.dart';
 import 'user_domains_page.dart';
 import 'domain_edit_page.dart';
 import 'add_payment_source_page.dart';
@@ -31,8 +31,8 @@ main() {
             page = new SignupPage();
             break;
 
-        case 'ProfilePage':
-            page = new ProfilePage();
+        case 'DashboardPage':
+            page = new DashboardPage();
             break;
 
         case 'AddDomainPage':
@@ -64,7 +64,7 @@ main() {
             break;
 
         default:
-            window.console.warn('Page is not initialized');
+            window.console.warn('Page $pageName is not initialized');
             break;
     }
 }
