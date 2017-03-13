@@ -1,0 +1,32 @@
+.b-add-domain-form-container
+    display flex
+    align-items center
+    justify-content center
+    height 400px
+
+    form
+        max-width 50%
+        .b-form-row
+            margin 0 0 20px 0
+            display flex
+            flex-direction row
+            label
+                flex-basis 50%
+                display block
+                flex-grow 1
+                line-height 2
+                padding 0 10px 0 0
+                font-size 0.9em
+            input
+                text-transform lowercase
+                border 1px solid rgba(0, 0, 0, 0.1)
+                flex-basis 50%
+                display block
+                flex-grow 1
+                padding 0 5px
+                min-width 200px
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)
+    .b-add-domain-form-container
+        form
+            max-width initial

@@ -1,0 +1,35 @@
+input[type=submit]
+button
+    outline none
+    transition all .2s ease-in-out
+    padding 15px 40px
+    background #548879
+    color #fff
+    border 0
+    box-shadow 2px 2px 0 rgba(0, 0, 0, 0.2)
+    font-size 0.9em
+    overflow hidden
+    position relative
+
+    &:before
+        transition all .2s ease-in-out
+        content ''
+        background rgba(0, 0, 0, 0.1)
+        display block
+        position absolute
+        width 20px
+        height 20px
+        top 0
+        left 0
+        border-radius 10px
+        transform scale(0)
+
+    &:active
+        box-shadow 1px 1px 0 rgba(0, 0, 0, 0.5)
+        transform translate(1px, 1px)
+
+    &:hover
+        background #618857
+
+//&:before
+//    transform scale(20)

@@ -1,0 +1,12 @@
+node_modules
+build
+server/server.app.js
+logs
+.idea
+utils/generateDomains.js
+.vscode
+npm-debug.log
+server/awskey.ts
+src/app/config.dart
+.packages
+pubspec.lock

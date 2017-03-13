@@ -1,0 +1,74 @@
+.b-top-bar-container
+    background-color #0d3243
+    display flex
+
+    .toggle-menu-button
+        display none
+        &:before
+            content '='
+            font-size 2em
+            text-align center
+            color #fff
+            line-height 60px
+            display block
+            width 60px
+            height 60px
+            background rgba(#0d3243, 0.8)
+            left -60px
+            top 0
+            position absolute
+
+    .left-area
+        flex-grow 1
+    .right-area
+        flex-grow 0
+
+    .left-area
+    .right-area
+        a
+            font-size 0.9em
+            text-decoration none
+            display inline-block
+            line-height 60px
+            padding 0 20px
+            height 60px
+            color rgba(white, 0.9)
+            &:hover
+                color rgba(white, 1)
+
+    .b-top-bar-container__domain-add-link
+        background rgba(#1abf6a, 0.2)
+        height 50px
+        line-height 50px
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)
+    .b-top-bar-container
+        flex-direction column
+        position fixed
+        left 0
+        right 0
+        top 0
+        bottom 0
+        transform translate(100%, 0);
+        -webkit-transition transform 0.2s
+
+        .toggle-menu-button
+            display block
+
+        .left-area
+        .right-area
+            display flex
+            flex-grow initial
+            flex-direction column
+            a
+                margin 0
+                background none
+
+        .right-area
+            order 1
+
+        .left-area
+            order 2
+
+        &.visible
+            transform translate(60px, 0);

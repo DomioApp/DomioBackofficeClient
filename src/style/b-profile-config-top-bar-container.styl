@@ -1,0 +1,29 @@
+.b-profile-config-top-bar-container
+    display flex
+    border-bottom 1px solid rgba(0,0,0,0.1)
+    margin-bottom 40px
+
+    a
+        text-decoration none
+        display inline-block
+        line-height 60px
+        padding 0 20px
+        height 60px
+        color rgba(#000, 0.8)
+        font-size 0.9em
+
+        &.active
+            color #000
+            font-weight bolder
+        &:hover
+            color rgba(#187, 1)
+
+@media only screen and (min-device-width: 320px) and (max-device-width: 480px) and (-webkit-min-device-pixel-ratio: 2)
+    .b-profile-top-bar-container
+        flex-direction column
+        height auto
+        background rgba(0, 0, 0, 0.05)
+        margin-bottom 10px
+        a
+            height 40px
+            line-height 40px

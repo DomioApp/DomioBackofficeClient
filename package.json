@@ -1,0 +1,22 @@
+{
+  "name": "domioclient",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "webpack",
+    "minify": "NODE_ENV=production webpack",
+    "style": "./node_modules/.bin/stylus ./src/style/style.styl -o /usr/local/domio_client",
+    "all": "npm run compile && npm run style",
+    "js-watch": "webpack -w",
+    "style-watch": "./node_modules/.bin/stylus -w ./src/style/style.styl -o /usr/local/domio_client",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Sergei Basharov <sergei@basharov.net> (http://basharov.net/)",
+  "license": "ISC",
+  "devDependencies": {
+    "jsonwebtoken": "^7.1.9",
+    "stylus": "^0.54.5"
+  }
+}

@@ -1,0 +1,40 @@
+.b-records-list-container
+    display flex
+    flex-flow column nowrap
+    justify-content space-between
+    font-size 0.8em
+
+    .b-record-row
+        display flex
+        margin-bottom 20px
+        background rgba(0, 0, 0, 0.05)
+
+        .cell
+            flex-grow 1
+            flex-basis 100px
+            overflow hidden
+            text-overflow ellipsis
+            white-space nowrap
+
+            &:empty:before
+                content '—'
+                color #ccc
+
+            &.cell-type
+                flex-basis 60px
+
+            &.cell-value
+                flex-basis 200px
+
+            &.cell-setid
+                flex-basis 60px
+
+            &.cell-ttl
+                flex-basis 60px
+
+            &.cell-weight
+                flex-basis 60px
+
+            .b-record-value-row
+                overflow hidden
+                text-overflow ellipsis

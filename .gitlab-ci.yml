@@ -1,0 +1,60 @@
+image: node:7.4.0
+
+#variables:
+#  BIN_PATH: "/domio"
+
+before_script:
+  #https://docs.gitlab.com/ee/ci/ssh_keys/README.html
+  # Install ssh-agent if not already installed, it is required by Docker.
+  # (change apt-get to yum if you use a CentOS-based image)
+  - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+
+  # Run ssh-agent (inside the build environment)
+  - eval $(ssh-agent -s)
+
+  # Add the SSH key stored in SSH_PRIVATE_KEY variable to the agent store
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+
+  # For Docker builds disable host key checking. Be aware that by adding that
+  # you are suspectible to man-in-the-middle attacks.
+  # WARNING: Use this only with the Docker executor, if you use it with shell
+  # you will overwrite your user's SSH config.
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'#    - export GO_PROJECT_PATH="$GOPATH/src/gitlab.com/$CI_PROJECT_NAMESPACE"
+
+#    - echo $GO_PROJECT_PATH
+#    - mkdir -p $GO_PROJECT_PATH
+#    - ln -s $(pwd) $GO_PROJECT_PATH
+#    - export GO_PROJECT_PATH="$GO_PROJECT_PATH/$CI_PROJECT_NAME"
+#    - echo $GO_PROJECT_PATH
+#    - cd $GO_PROJECT_PATH
+#    - ls $GO_PROJECT_PATH
+
+stages:
+#    - build
+    - deploy
+#    - verify
+#    - style
+
+#go_build:
+#    stage: build
+#    script:
+#        - npm install
+#        - npm run f
+#        - npm run s
+#    only:
+#    - tags
+
+deploy_staging:
+    stage: deploy
+    script:
+      - echo "Deploy to staging server"
+      - ssh root@$DEPLOY_STAGING_IP "rm -rf ~/domioclient; git clone git@gitlab.com:basharov/DomioClient.git ~/domioclient; cd ~/domioclient; sh ./deploy.sh"
+    environment:
+      name: staging
+      url: https://www.domio.in
+
+  # Tagged commit is used to build the app, so master branch is not needed
+  # http://stackoverflow.com/questions/41628244/how-to-make-gitlab-build-the-commit-only-once
+    only:
+    - tags
