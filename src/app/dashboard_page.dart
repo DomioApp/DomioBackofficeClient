@@ -62,7 +62,12 @@ class DashboardPage implements Page {
     }
 
     String loadUsersUi(List users) {
-        var a = users.map((user) => '<div>${user['email']}</div>');
+        var a = users.map((user) =>
+        """
+            <div>${user['email']}</div>
+            <hr>
+        """
+        );
         return a.join('');
     }
 }
