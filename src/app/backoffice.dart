@@ -1,9 +1,8 @@
 import 'dart:html';
 import 'api_connector.dart';
-import 'page.dart';
 import 'dart:convert';
 
-class ProfilePageModel {
+class BackofficeModel {
     String name;
     num price_per_month;
 
@@ -13,20 +12,19 @@ class ProfilePageModel {
             ..['price_per_month'] = price_per_month;
 }
 
-class BackofficeApp implements Page {
+class Backoffice {
     ButtonElement getUsersLink;
     DivElement mainArea;
-    ProfilePageModel model;
+    BackofficeModel model;
 
-    BackofficeApp() {
+    Backoffice() {
         init();
         bindElements();
         bindEvents();
     }
 
     init() {
-        model = new ProfilePageModel();
-        print(runtimeType);
+        model = new BackofficeModel();
     }
 
     bindElements() {
