@@ -1,6 +1,6 @@
 import 'dart:html';
 import 'dart:convert' show JSON;
-import './config.dart';
+import '../../config.dart';
 
 enum Endpoints {
     Login

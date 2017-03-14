@@ -1,7 +1,10 @@
 import 'dart:html';
-import 'api_connector.dart';
-import 'page.dart';
+import 'components/core/api_connector.dart';
 import 'config.dart';
+
+void main() {
+    new LoginPage();
+}
 
 class LoginPageModel {
     String email;
@@ -14,7 +17,7 @@ class LoginPageModel {
 
 }
 
-class LoginPage implements Page {
+class LoginPage {
     FormElement form;
     DivElement errorMessageContainer;
     EmailInputElement emailInput;
@@ -69,7 +72,7 @@ class LoginPage implements Page {
                 document.cookie = 'token=${token.token}';
                 document.cookie = 'email=${token.email}';
 
-                window.location.assign('${siteUrl}/profile/domains');
+                window.location.assign('${siteUrl}/dashboard');
             }
         if (request.status == 401 || request.status == 0) {
             showError();
