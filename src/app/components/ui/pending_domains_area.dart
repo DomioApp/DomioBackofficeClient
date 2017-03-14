@@ -6,15 +6,21 @@ import '../core/connection.dart';
 import '../core/router.dart';
 import 'spinner.dart';
 
-class User {
-    String Email;
-    String Id;
-    String Role;
+class Domain {
+    String Name;
+    String Owner;
+    num PricePerMonth;
+    bool IsApproved;
+    bool IsRented;
+    bool IsVisible;
 
-    User(Map userMap) {
-        Email = userMap['email'];
-        Id = userMap['id'];
-        Role = userMap['role'];
+    Domain(Map domainMap) {
+        Name = domainMap['name'];
+        Owner = domainMap['owner'];
+        PricePerMonth = domainMap['price_per_month'];
+        IsApproved = domainMap['is_approved'];
+        IsRented = domainMap['is_rented'];
+        IsVisible = domainMap['is_visible'];
     }
 }
 
@@ -73,12 +79,14 @@ class PendingDomainsArea {
 
     String loadUsersList(String data) {
         List<Map> decodedJson = JSON.decode(data);
-        List<User> users = decodedJson.map((userMap) => new User(userMap));
+        List<Domain> users = decodedJson.map((userMap) => new Domain(userMap));
         return users.map(
-                (User user) => """
+                (Domain user) => """
                                 <div class='b-user-item-container'>
-                                    ${user.Email}
-                                    ${user.Id}
+                                    ${user.Name}
+                                    ${user.Owner}
+                                    ${user.PricePerMonth}
+                                    ${user.IsApproved}
                                 </div>
                                """
         ).join('');
