@@ -1,7 +1,9 @@
 import 'dart:html';
 import 'dart:convert';
+import 'dart:async';
 
 import '../core/connection.dart';
+import '../core/router.dart';
 
 class User {
     String Email;
@@ -19,32 +21,49 @@ class User {
 class UsersArea {
     Connection connection;
     DivElement container;
+    String containerQuerySelector;
+    Stream onViewLoaded;
 
-    init(DivElement containerInstance, Connection connectionInstance) {
+    void init(Router router, Connection connectionInstance, Stream onViewLoadedInstance) {
         connection = connectionInstance;
-        container = containerInstance;
+        onViewLoaded = onViewLoadedInstance;
         bindEvents();
     }
 
-    bindEvents() {
-        connection.onData.listen(updateView);
-        connection.getRequest('/users', null);
+    void bindEvents() {
+        connection.onData.listen(render);
+//        connection.getRequest('/users', null);
+        onViewLoaded.listen((bool event) => print(event));
     }
 
-    void updateView(String data) {
+    void render(String data) {
+        if (container == null) {
+            container = document.querySelector('.b-main-area-container');
+        }
+
         container.setInnerHtml(getTemplate(data));
     }
 
     String getTemplate(String data) {
-        List<Map> decodedJson = JSON.decode(data);
-
-        List<User> users = decodedJson.map((userMap) => new User(userMap));
-        print(users);
+        String usersList = loadUsersList(data);
 
         return """
-                    <div class="b-users-area">
-                        <p>$data</p>
-                    </div>
-                """;
+                   <div class="b-users-area">
+                       <p>$usersList</p>
+                   </div>
+               """;
+    }
+
+    String loadUsersList(String data) {
+        List<Map> decodedJson = JSON.decode(data);
+        List<User> users = decodedJson.map((userMap) => new User(userMap));
+        return users.map(
+                (User user) => """
+                                <div class='b-user-item-container'>
+                                    ${user.Email}
+                                    ${user.Id}
+                                </div>
+                               """
+        ).join('');
     }
 }

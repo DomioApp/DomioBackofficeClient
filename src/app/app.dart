@@ -4,5 +4,5 @@ Backoffice app;
 
 main() {
     app = new Backoffice();
-    app.init('body');
+    app.init();
 }

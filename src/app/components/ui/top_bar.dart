@@ -1,11 +1,34 @@
+import 'dart:async';
+
+import '../core/router.dart';
+import '../core/connection.dart';
+
 import 'dart:html';
 
 class TopBar {
-    TopBar() {
+    Router router;
+    Stream onViewLoaded;
 
+    String querySelectorString;
+    DivElement container;
+
+    TopBar(this.querySelectorString);
+
+    void init(Router routerInstance, Connection connection, Stream onViewLoadedInstance) {
+        router = routerInstance;
+        onViewLoaded = onViewLoadedInstance;
+        bindEvents();
     }
 
-    init(DivElement container) {
+    void bindEvents() {
+        onViewLoaded.listen((bool event) => render());
+    }
+
+    void render() {
+        if (container == null) {
+            container = document.querySelector(querySelectorString);
+        }
+
         container.setInnerHtml(getTemplate());
     }
 
