@@ -2,14 +2,14 @@ import 'dart:async';
 
 class Router {
     List<String> routes = new List();
-    StreamController dataStreamController = new StreamController<String>();
+    StreamController routeStreamController = new StreamController<String>();
 
-    Stream<String> get onRouteChange => dataStreamController.stream;
+    Stream<String> get onRouteChange => routeStreamController.stream;
 
     init() {}
 
     pushRoute(String route) {
         routes.add(route);
-        dataStreamController.add(route);
+        routeStreamController.add(route);
     }
 }

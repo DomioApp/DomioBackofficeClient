@@ -47,7 +47,6 @@ class SubBar {
     }
 
     void bindUserEvents() {
-        print('bindUserEvents');
         usersLink.onClick.listen(showUsers);
         pendingDomainsLink.onClick.listen(showPendingDomains);
     }
@@ -55,8 +54,6 @@ class SubBar {
     void showUsers(MouseEvent event) {
         event.preventDefault();
         event.stopPropagation();
-        print(event);
-
         router.pushRoute(usersLink.getAttribute('data-route'));
     }
 

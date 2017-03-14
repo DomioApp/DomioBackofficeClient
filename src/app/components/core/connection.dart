@@ -153,15 +153,14 @@ String readCookie(String name) {
 }
 
 class Connection {
-    StreamController dataStreamController;
+    StreamController usersDataStreamController = new StreamController<String>();
+    StreamController pendingDomainsDataStreamController = new StreamController<String>();
 
-    Stream<String> get onData => dataStreamController.stream;
+    Stream<String> get onUsersData => usersDataStreamController.stream;
 
-    init() {
-        dataStreamController = new StreamController<String>();
-    }
+    Stream<String> get onPendingDomainsData => pendingDomainsDataStreamController.stream;
 
-    getRequest(String url, model) async {
+    getRequest(String url, model, StreamController streamController) async {
         HttpRequest request = new HttpRequest();
 
         request.withCredentials = true;
@@ -183,7 +182,7 @@ class Connection {
         String jsonData = JSON.encode(model);
 
 
-        request.onLoadEnd.listen((ProgressEvent event) => dataStreamController.add(request.responseText));
+        request.onLoadEnd.listen((ProgressEvent event) => streamController.add(request.responseText));
 
         request.send(jsonData);
     }

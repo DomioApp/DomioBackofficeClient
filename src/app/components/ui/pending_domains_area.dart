@@ -4,7 +4,6 @@ import 'dart:async';
 
 import '../core/connection.dart';
 import '../core/router.dart';
-
 import 'spinner.dart';
 
 class User {
@@ -20,7 +19,7 @@ class User {
 }
 
 
-class UsersArea {
+class PendingDomainsArea {
     Connection connection;
     DivElement container;
     String containerQuerySelector;
@@ -33,7 +32,7 @@ class UsersArea {
     }
 
     void bindEvents() {
-        connection.onUsersData.listen(updateView);
+        connection.onPendingDomainsData.listen(updateView);
     }
 
     void render() {
@@ -43,14 +42,13 @@ class UsersArea {
 
         showSpinner();
 
-        connection.getRequest('/users', null, connection.usersDataStreamController);
+        connection.getRequest('/domains/pending', null, connection.pendingDomainsDataStreamController);
     }
 
     void showSpinner() {
         Spinner spinner = new Spinner();
         spinner.show(container);
     }
-
 
     void updateView(String data) {
         document.body
@@ -67,7 +65,7 @@ class UsersArea {
         String usersList = loadUsersList(data);
 
         return """
-                   <div class="b-users-area">
+                   <div class="b-pending-domains-area">
                        <p>$usersList</p>
                    </div>
                """;

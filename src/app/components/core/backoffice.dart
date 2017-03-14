@@ -7,12 +7,14 @@ import 'router.dart';
 import '../ui/top_bar.dart';
 import '../ui/sub_bar.dart';
 import '../ui/users_area.dart';
+import '../ui/pending_domains_area.dart';
 
 class Backoffice {
     DivElement mainArea;
     TopBar topBar = new TopBar('.b-app-container > .b-top-bar-container');
     SubBar subBar = new SubBar('.b-app-container > .b-sub-bar-container');
     UsersArea usersArea = new UsersArea();
+    PendingDomainsArea pendingDomainsArea = new PendingDomainsArea();
 
 
     Connection connection = new Connection();
@@ -21,9 +23,7 @@ class Backoffice {
 
     Stream<bool> get onViewLoaded => viewStreamController.stream;
 
-    init() {
-        connection.init();
-
+    void init() {
         bindEvents();
         initContainer();
         initComponents();
@@ -49,7 +49,16 @@ class Backoffice {
     }
 
     void bindEvents() {
-//        onViewLoaded.listen((bool event) => print('!!! $event !!!'));
+        onViewLoaded.listen((bool event) => print('Main view loaded'));
+        router.onRouteChange.listen(loadView);
+    }
+
+    void loadView(String route) {
+        if (route == 'users') {
+            usersArea.render();
+        } else if (route == 'pending-domains') {
+            pendingDomainsArea.render();
+        }
     }
 
     String getTemplate() {
@@ -69,5 +78,6 @@ class Backoffice {
         topBar.init(router, connection, onViewLoaded);
         subBar.init(router, connection, onViewLoaded);
         usersArea.init(router, connection, onViewLoaded);
+        pendingDomainsArea.init(router, connection, onViewLoaded);
     }
 }
