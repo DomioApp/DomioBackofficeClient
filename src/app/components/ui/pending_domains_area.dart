@@ -68,25 +68,25 @@ class PendingDomainsArea {
     }
 
     String getTemplate(String data) {
-        String usersList = loadUsersList(data);
+        String domainsList = loadDomainsList(data);
 
         return """
                    <div class="b-pending-domains-area">
-                       <p>$usersList</p>
+                       <p>$domainsList</p>
                    </div>
                """;
     }
 
-    String loadUsersList(String data) {
+    String loadDomainsList(String data) {
         List<Map> decodedJson = JSON.decode(data);
-        List<Domain> users = decodedJson.map((userMap) => new Domain(userMap));
-        return users.map(
-                (Domain user) => """
-                                <div class='b-user-item-container'>
-                                    ${user.Name}
-                                    ${user.Owner}
-                                    ${user.PricePerMonth}
-                                    ${user.IsApproved}
+        List<Domain> domains = decodedJson.map((domainMap) => new Domain(domainMap));
+        return domains.map(
+                (Domain domain) => """
+                                <div class='b-domain-item-container'>
+                                    ${domain.Name}
+                                    ${domain.Owner}
+                                    ${domain.PricePerMonth}
+                                    ${domain.IsApproved}
                                 </div>
                                """
         ).join('');
