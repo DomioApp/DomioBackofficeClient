@@ -1,6 +1,8 @@
 import 'components/core/backoffice.dart';
 
+Backoffice app;
+
 main() {
-    Backoffice app = new Backoffice();
+    app = new Backoffice();
     app.init('body');
 }

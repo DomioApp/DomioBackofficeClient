@@ -1,5 +1,5 @@
 import 'dart:html';
-import 'components/core/api_connector.dart';
+import 'components/core/connection.dart';
 import 'config.dart';
 
 void main() {

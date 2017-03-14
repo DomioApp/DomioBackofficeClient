@@ -2,13 +2,19 @@ import 'dart:html';
 import 'dart:async';
 
 import '../ui/top_bar.dart';
+import '../ui/users_area.dart';
+import 'connection.dart';
 
 class Backoffice {
     DivElement mainArea;
 
     TopBar topBar = new TopBar();
+    UsersArea usersArea = new UsersArea();
+    Connection connection = new Connection();
 
     init(String queryString) {
+        connection.init();
+
         initContainer(queryString);
     }
 
@@ -42,7 +48,8 @@ class Backoffice {
     void initContainer(String queryString) {
         mainArea = document.querySelector(queryString);
 
-        const TIMEOUT = const Duration(milliseconds: 2400);
+//        const TIMEOUT = const Duration(milliseconds: 2400);
+        const TIMEOUT = const Duration(milliseconds: 240);
 
         new Timer(TIMEOUT, loadUi);
     }
@@ -54,7 +61,7 @@ class Backoffice {
             .classes
             .remove('loading');
 
-        const TIMEOUT = const Duration(milliseconds: 400);
+        const TIMEOUT = const Duration(milliseconds: 300);
 
         new Timer(TIMEOUT, loadElements);
     }
@@ -66,14 +73,20 @@ class Backoffice {
     }
 
     void bindElements() {
-        topBar.init(mainArea.querySelector('.app-container > .top-bar-container'));
+        topBar.init(mainArea.querySelector('.b-app-container > .b-top-bar-container'));
+        usersArea.init(mainArea.querySelector('.b-app-container .b-users-area-container'), connection);
     }
 
     String getTemplate() {
         return """
-                   <div class='app-container'>
-                       <div class='top-bar-container'></div>
-                       <div class='main-area-container'></div>
+                   <div class='b-app-container'>
+
+                       <div class='b-top-bar-container'></div>
+
+                       <div class='b-main-area-container'>
+                           <div class='b-users-area-container'></div>
+                       </div>
+
                    </div>
                """;
     }

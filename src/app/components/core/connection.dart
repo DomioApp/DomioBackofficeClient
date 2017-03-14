@@ -1,13 +1,10 @@
 import 'dart:html';
+import 'dart:async';
 import 'dart:convert' show JSON;
 import '../../config.dart';
 
 enum Endpoints {
     Login
-}
-
-void onDataLoaded(String resp) {
-//    Map decoded = JSON.decode(resp);
 }
 
 class Token {
@@ -153,4 +150,42 @@ String readCookie(String name) {
         }
     }
     return null;
+}
+
+class Connection {
+    StreamController dataStreamController;
+
+    Stream<String> get onData => dataStreamController.stream;
+
+    init() {
+        dataStreamController = new StreamController<String>();
+    }
+
+    getRequest(String url, model) async {
+        HttpRequest request = new HttpRequest();
+
+        request.withCredentials = true;
+
+
+        var fullUrl = '${apiUrl}${url}';
+
+        request.open('GET', fullUrl);
+
+        request.setRequestHeader('Content-Type', 'application/json');
+
+
+        if (window.localStorage['token'] != null) {
+            request.setRequestHeader(
+                'Authorization', 'Bearer ${window.localStorage['token']}');
+        }
+
+
+        String jsonData = JSON.encode(model);
+
+
+        request.onLoadEnd.listen((ProgressEvent event) => dataStreamController.add(request.responseText));
+
+        request.send(jsonData);
+    }
+
 }
