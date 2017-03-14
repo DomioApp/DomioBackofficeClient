@@ -4,20 +4,10 @@ import 'dart:async';
 
 import '../core/connection.dart';
 import '../core/router.dart';
+import '../core/user.dart';
 
 import 'spinner.dart';
-
-class User {
-    String Email;
-    String Id;
-    String Role;
-
-    User(Map userMap) {
-        Email = userMap['email'];
-        Id = userMap['id'];
-        Role = userMap['role'];
-    }
-}
+import 'user_item.dart';
 
 
 class UsersArea {
@@ -53,36 +43,33 @@ class UsersArea {
 
 
     void updateView(String data) {
-        document.body
-            .querySelector('.spinner')
-            .classes
-            .remove('loading');
-
-        const TIMEOUT = const Duration(milliseconds: 300);
-
-        new Timer(TIMEOUT, () => container.setInnerHtml(getTemplate(data)));
+        container.children.clear();
+        container.append(getTemplate(data));
     }
 
-    String getTemplate(String data) {
-        String usersList = loadUsersList(data);
 
-        return """
-                   <div class="b-users-area">
-                       <p>$usersList</p>
-                   </div>
-               """;
+    void showUserDetails(MouseEvent event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        print(event.target);
     }
 
-    String loadUsersList(String data) {
+    DivElement getTemplate(String data) {
+        NodeList usersList = loadUsersList(data);
+
+        DivElement container = new Element.tag('div');
+        container.classes.add('b-users-area');
+        usersList.forEach((userItem) => container.append(userItem));
+
+        return container;
+    }
+
+    NodeList loadUsersList(String data) {
         List<Map> decodedJson = JSON.decode(data);
         List<User> users = decodedJson.map((userMap) => new User(userMap));
-        return users.map(
-                (User user) => """
-                                <div class='b-user-item-container'>
-                                    ${user.Email}
-                                    ${user.Id}
-                                </div>
-                               """
-        ).join('');
+        List<UserItem> userItems = users.map((user) => new UserItem(user));
+
+        return userItems.map((UserItem user) => user.getTemplate());
     }
 }
