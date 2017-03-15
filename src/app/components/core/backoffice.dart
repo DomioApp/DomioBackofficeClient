@@ -3,6 +3,8 @@ import 'dart:async';
 
 import 'connection.dart';
 import 'router.dart';
+import 'store.dart';
+import 'actions.dart';
 
 import '../ui/top_bar.dart';
 import '../ui/sub_bar.dart';
@@ -16,8 +18,9 @@ class Backoffice {
     UsersArea usersArea = new UsersArea();
     PendingDomainsArea pendingDomainsArea = new PendingDomainsArea();
 
-
+    Store store = new Store();
     Connection connection = new Connection();
+
     Router router = new Router();
     StreamController viewStreamController = new StreamController<bool>.broadcast();
 
@@ -26,7 +29,11 @@ class Backoffice {
     void init() {
         bindEvents();
         initContainer();
-        initComponents();
+//        initComponents();
+
+        connection.sendRequest(Requests.GetUsers);
+
+        store.dispatch.add(new FetchUsers());
     }
 
     void initContainer() {
@@ -49,6 +56,8 @@ class Backoffice {
     }
 
     void bindEvents() {
+        store.subscribe.listen((state) => print('${state.Users}'));
+
         onViewLoaded.listen((bool event) => print('Main view loaded'));
         router.onRouteChange.listen(loadView);
     }

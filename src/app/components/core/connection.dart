@@ -1,143 +1,11 @@
 import 'dart:html';
 import 'dart:async';
-import 'dart:convert' show JSON;
 import '../../config.dart';
 
-enum Endpoints {
-    Login
+enum Requests {
+    GetUsers,
+    GetPendingDomains
 }
-
-class Token {
-    String email;
-    String token;
-    String id;
-
-    Token.fromJsonString(String jsonString) {
-        var resp = JSON.decode(jsonString);
-
-        email = resp['email'];
-        token = resp['token'];
-        id = resp['id'];
-
-        if (email == null || token == null || id == null) {
-            throw new StateError('one of fields is empty');
-        }
-    }
-}
-
-getRequest(String url, model) async {
-    HttpRequest request = new HttpRequest();
-
-    request.withCredentials = true;
-
-
-    var fullUrl = '${apiUrl}${url}';
-
-    request.open('GET', fullUrl);
-
-    request.setRequestHeader('Content-Type', 'application/json');
-
-
-    if (window.localStorage['token'] != null) {
-        request.setRequestHeader(
-            'Authorization', 'Bearer ${window.localStorage['token']}');
-    }
-
-
-    String jsonData = JSON.encode(model);
-
-    request.send(jsonData);
-
-    await request.onLoadEnd.first;
-
-    return request;
-}
-
-postRequest(String url, model) async {
-    HttpRequest request = new HttpRequest();
-
-    request.withCredentials = true;
-
-
-    var fullUrl = '${apiUrl}${url}';
-
-    request.open("POST", fullUrl);
-
-    request.setRequestHeader('Content-Type', 'application/json');
-
-
-    if (window.localStorage['token'] != null) {
-        request.setRequestHeader(
-            'Authorization', 'Bearer ${window.localStorage['token']}');
-    }
-
-
-    String jsonData = JSON.encode(model);
-
-    request.send(jsonData);
-
-    await request.onLoadEnd.first;
-
-    return request;
-}
-
-putRequest(String url, model) async {
-    HttpRequest request = new HttpRequest();
-
-    request.withCredentials = true;
-
-
-    var fullUrl = '${apiUrl}${url}';
-
-    request.open('PUT', fullUrl);
-
-    request.setRequestHeader('Content-Type', 'application/json');
-
-    var token = readCookie('token');
-
-    if (token != null) {
-        request.setRequestHeader('Authorization', 'Bearer $token');
-    }
-
-
-    String jsonData = JSON.encode(model);
-
-    request.send(jsonData);
-
-    await request.onLoadEnd.first;
-
-    return request;
-}
-
-deleteRequest(String url, model) async {
-    HttpRequest request = new HttpRequest();
-
-    request.withCredentials = true;
-
-
-    var fullUrl = '${apiUrl}${url}';
-
-    request.open("DELETE", fullUrl);
-
-    request.setRequestHeader('Content-Type', 'application/json');
-
-
-    if (window.localStorage['token'] != null) {
-        request.setRequestHeader(
-            'Authorization', 'Bearer ${window.localStorage['token']}');
-    }
-
-
-    String jsonData = JSON.encode(model);
-
-    request.send(jsonData);
-
-
-    await request.onLoadEnd.first;
-
-    return request;
-}
-
 
 String readCookie(String name) {
     String nameEQ = name + '=';
@@ -149,6 +17,7 @@ String readCookie(String name) {
             return c.substring(nameEQ.length);
         }
     }
+
     return null;
 }
 
@@ -160,13 +29,15 @@ class Connection {
 
     Stream<String> get onPendingDomainsData => pendingDomainsDataStreamController.stream;
 
-    getRequest(String url, model, StreamController streamController) async {
+    sendRequest(Requests endpoint) {
         HttpRequest request = new HttpRequest();
 
         request.withCredentials = true;
 
 
-        var fullUrl = '${apiUrl}${url}';
+        print(endpoint);
+
+        var fullUrl = '${apiUrl}${endpoint.toString()}';
 
         request.open('GET', fullUrl);
 
@@ -174,12 +45,35 @@ class Connection {
 
 
         if (window.localStorage['token'] != null) {
-            request.setRequestHeader(
-                'Authorization', 'Bearer ${window.localStorage['token']}');
+            request.setRequestHeader('Authorization', 'Bearer ${window.localStorage['token']}');
+        }
+
+        request.onLoadEnd.listen((_) => print(request.responseText));
+
+        request.send();
+    }
+
+    getRequestWithData(Requests endpoint, dataToSend, StreamController streamController) async {
+        HttpRequest request = new HttpRequest();
+
+        request.withCredentials = true;
+
+
+        print(endpoint);
+
+        var fullUrl = '${apiUrl}${endpoint.toString()}';
+
+        request.open('GET', fullUrl);
+
+        request.setRequestHeader('Content-Type', 'application/json');
+
+
+        if (window.localStorage['token'] != null) {
+            request.setRequestHeader('Authorization', 'Bearer ${window.localStorage['token']}');
         }
 
 
-        String jsonData = JSON.encode(model);
+        String jsonData = JSON.encode(dataToSend);
 
 
         request.onLoadEnd.listen((ProgressEvent event) => streamController.add(request.responseText));

@@ -33,7 +33,7 @@ class UsersArea {
 
         showSpinner();
 
-        connection.getRequest('/users', null, connection.usersDataStreamController);
+        connection.sendRequest(Requests.GetUsers);
     }
 
     void showSpinner() {
@@ -67,7 +67,7 @@ class UsersArea {
 
     NodeList loadUsersList(String data) {
         List<Map> decodedJson = JSON.decode(data);
-        List<User> users = decodedJson.map((userMap) => new User(userMap));
+        List<User> users = decodedJson.map((userMap) => new User.fromMap(userMap));
         List<UserItem> userItems = users.map((user) => new UserItem(user));
 
         return userItems.map((UserItem user) => user.getTemplate());

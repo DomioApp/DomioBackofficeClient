@@ -3,7 +3,9 @@ class User {
     String Id;
     String Role;
 
-    User(Map userMap) {
+    User() {}
+
+    User.fromMap(Map userMap) {
         Email = userMap['email'];
         Id = userMap['id'];
         Role = userMap['role'];

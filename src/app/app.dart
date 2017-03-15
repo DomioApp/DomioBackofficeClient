@@ -1,4 +1,5 @@
 import 'components/core/backoffice.dart';
+import 'components/core/actions.dart';
 
 Backoffice app;
 

@@ -48,7 +48,7 @@ class PendingDomainsArea {
 
         showSpinner();
 
-        connection.getRequest('/domains/pending', null, connection.pendingDomainsDataStreamController);
+        connection.sendRequest(Requests.GetPendingDomains);
     }
 
     void showSpinner() {
