@@ -3,26 +3,11 @@ import 'dart:convert';
 import 'dart:async';
 
 import '../core/connection.dart';
+import '../core/requests.dart';
 import '../core/router.dart';
+import '../model/domain.dart';
+
 import 'spinner.dart';
-
-class Domain {
-    String Name;
-    String Owner;
-    num PricePerMonth;
-    bool IsApproved;
-    bool IsRented;
-    bool IsVisible;
-
-    Domain(Map domainMap) {
-        Name = domainMap['name'];
-        Owner = domainMap['owner'];
-        PricePerMonth = domainMap['price_per_month'];
-        IsApproved = domainMap['is_approved'];
-        IsRented = domainMap['is_rented'];
-        IsVisible = domainMap['is_visible'];
-    }
-}
 
 
 class PendingDomainsArea {
@@ -38,7 +23,7 @@ class PendingDomainsArea {
     }
 
     void bindEvents() {
-        connection.onPendingDomainsData.listen(updateView);
+//        connection.onPendingDomainsData.listen(updateView);
     }
 
     void render() {
@@ -48,7 +33,7 @@ class PendingDomainsArea {
 
         showSpinner();
 
-        connection.sendRequest(Requests.GetPendingDomains);
+        connection.sendRequest(Requests.FetchPendingDomains);
     }
 
     void showSpinner() {
@@ -79,7 +64,7 @@ class PendingDomainsArea {
 
     String loadDomainsList(String data) {
         List<Map> decodedJson = JSON.decode(data);
-        List<Domain> domains = decodedJson.map((domainMap) => new Domain(domainMap));
+        List<Domain> domains = decodedJson.map((domainMap) => new Domain.fromMap(domainMap));
         return domains.map(
                 (Domain domain) => """
                                 <div class='b-domain-item-container'>

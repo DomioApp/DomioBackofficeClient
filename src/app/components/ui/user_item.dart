@@ -1,6 +1,6 @@
 import 'dart:html';
 
-import '../core/user.dart';
+import '../model/user.dart';
 
 class UserItem {
     User user;

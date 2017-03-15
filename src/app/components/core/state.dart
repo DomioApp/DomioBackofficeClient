@@ -1,23 +1,20 @@
-import 'actions.dart';
-import 'user.dart';
+import '../actions/action.dart';
+import '../model/user.dart';
+import '../model/domain.dart';
+import '../reducers/users_reducer.dart';
+import '../reducers/pending_domains_reducer.dart';
 
 class State {
     List<User> Users;
+    List<Domain> PendingDomains;
 
-    State.initial() :
-            Users = new List();
-
-    State(State state, Action action) :
-            Users = usersReducer(state.Users, action);
-}
-
-
-List<User> usersReducer(List<User> users, Action action) {
-    switch (action.runtimeType) {
-        case FetchUsers:
-            users.add(new User());
-            break;
+    State.initial() {
+        Users = new List<User>();
+        PendingDomains = new List<Domain>();
     }
 
-    return users;
+    State(State state, Action action) {
+        Users = usersReducer(state, action).Users;
+        PendingDomains = pendingDomainsReducer(state, action).PendingDomains;
+    }
 }

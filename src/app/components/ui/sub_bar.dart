@@ -60,7 +60,6 @@ class SubBar {
     void showPendingDomains(MouseEvent event) {
         event.preventDefault();
         event.stopPropagation();
-        print(event);
 
         router.pushRoute(pendingDomainsLink.getAttribute('data-route'));
     }

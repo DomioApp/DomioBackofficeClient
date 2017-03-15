@@ -1,11 +1,10 @@
 import 'dart:html';
 import 'dart:async';
-import '../../config.dart';
+import 'dart:convert';
 
-enum Requests {
-    GetUsers,
-    GetPendingDomains
-}
+import '../../config.dart';
+import '../model/payload.dart';
+import 'requests.dart';
 
 String readCookie(String name) {
     String nameEQ = name + '=';
@@ -22,22 +21,19 @@ String readCookie(String name) {
 }
 
 class Connection {
-    StreamController usersDataStreamController = new StreamController<String>();
-    StreamController pendingDomainsDataStreamController = new StreamController<String>();
+    StreamController dataStreamController = new StreamController<Payload>();
 
-    Stream<String> get onUsersData => usersDataStreamController.stream;
-
-    Stream<String> get onPendingDomainsData => pendingDomainsDataStreamController.stream;
+    Stream<Payload> get onData => dataStreamController.stream;
 
     sendRequest(Requests endpoint) {
+        String url = getUrl(endpoint);
+
         HttpRequest request = new HttpRequest();
 
         request.withCredentials = true;
 
 
-        print(endpoint);
-
-        var fullUrl = '${apiUrl}${endpoint.toString()}';
+        var fullUrl = '${apiUrl}${url}';
 
         request.open('GET', fullUrl);
 
@@ -48,9 +44,23 @@ class Connection {
             request.setRequestHeader('Authorization', 'Bearer ${window.localStorage['token']}');
         }
 
-        request.onLoadEnd.listen((_) => print(request.responseText));
+        request.onLoadEnd.listen((_) => dataStreamController.add(new Payload(endpoint, request.responseText)));
 
         request.send();
+    }
+
+    String getUrl(Requests endpoint) {
+        String url = null;
+        if (endpoint == Requests.FetchUsers) {
+            url = '/users';
+        } else if (endpoint == Requests.FetchPendingDomains) {
+            url = '/domains/pending';
+        }
+        else {
+            throw('Endpoint must be defined.');
+        }
+
+        return url;
     }
 
     getRequestWithData(Requests endpoint, dataToSend, StreamController streamController) async {
@@ -58,8 +68,6 @@ class Connection {
 
         request.withCredentials = true;
 
-
-        print(endpoint);
 
         var fullUrl = '${apiUrl}${endpoint.toString()}';
 
@@ -80,5 +88,4 @@ class Connection {
 
         request.send(jsonData);
     }
-
 }

@@ -1,10 +1,10 @@
 import 'dart:html';
-import 'dart:convert';
 import 'dart:async';
 
 import '../core/connection.dart';
 import '../core/router.dart';
-import '../core/user.dart';
+import '../model/payload.dart';
+import '../core/requests.dart';
 
 import 'spinner.dart';
 import 'user_item.dart';
@@ -23,7 +23,7 @@ class UsersArea {
     }
 
     void bindEvents() {
-        connection.onUsersData.listen(updateView);
+        connection.onData.listen(updateView);
     }
 
     void render() {
@@ -33,7 +33,7 @@ class UsersArea {
 
         showSpinner();
 
-        connection.sendRequest(Requests.GetUsers);
+        connection.sendRequest(Requests.FetchUsers);
     }
 
     void showSpinner() {
@@ -42,20 +42,18 @@ class UsersArea {
     }
 
 
-    void updateView(String data) {
+    void updateView(Payload payload) {
         container.children.clear();
-        container.append(getTemplate(data));
+        container.append(getTemplate(payload.data));
     }
 
 
     void showUserDetails(MouseEvent event) {
         event.preventDefault();
         event.stopPropagation();
-
-        print(event.target);
     }
 
-    DivElement getTemplate(String data) {
+    DivElement getTemplate(List data) {
         NodeList usersList = loadUsersList(data);
 
         DivElement container = new Element.tag('div');
@@ -65,10 +63,8 @@ class UsersArea {
         return container;
     }
 
-    NodeList loadUsersList(String data) {
-        List<Map> decodedJson = JSON.decode(data);
-        List<User> users = decodedJson.map((userMap) => new User.fromMap(userMap));
-        List<UserItem> userItems = users.map((user) => new UserItem(user));
+    NodeList loadUsersList(List data) {
+        List<UserItem> userItems = data.map((user) => new UserItem(user));
 
         return userItems.map((UserItem user) => user.getTemplate());
     }

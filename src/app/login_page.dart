@@ -1,6 +1,8 @@
 import 'dart:html';
-import 'components/core/connection.dart';
+import 'dart:convert';
 import 'config.dart';
+
+import 'components/model/token.dart';
 
 void main() {
     new LoginPage();
@@ -31,7 +33,6 @@ class LoginPage {
     }
 
     init() {
-        print(runtimeType);
         model = new LoginPageModel();
     }
 
@@ -54,13 +55,7 @@ class LoginPage {
         event.preventDefault();
         event.stopPropagation();
 
-        window.console.log(getState());
-
         HttpRequest request = await postRequest('/user/login', getState());
-
-        window.console.log(model);
-
-        window.console.log(request.response);
 
         if (request.readyState == HttpRequest.DONE)
             if (request.status == 200 || request.status == 0) {
@@ -104,4 +99,32 @@ class LoginPage {
                 break;
         }
     }
+}
+
+postRequest(String url, model) async {
+    HttpRequest request = new HttpRequest();
+
+    request.withCredentials = true;
+
+
+    var fullUrl = '${apiUrl}${url}';
+
+    request.open("POST", fullUrl);
+
+    request.setRequestHeader('Content-Type', 'application/json');
+
+
+    if (window.localStorage['token'] != null) {
+        request.setRequestHeader(
+            'Authorization', 'Bearer ${window.localStorage['token']}');
+    }
+
+
+    String jsonData = JSON.encode(model);
+
+    request.send(jsonData);
+
+    await request.onLoadEnd.first;
+
+    return request;
 }

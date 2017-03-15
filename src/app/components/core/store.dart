@@ -1,8 +1,9 @@
 import 'dart:async';
 
 import 'state.dart';
-import 'actions.dart';
-import 'connection.dart';
+import '../actions/action.dart';
+import '../model/payload.dart';
+import 'requests.dart';
 
 class Store {
     final StreamController<Action> dispatch = new StreamController.broadcast();
@@ -11,8 +12,6 @@ class Store {
     Stream<State> get subscribe => _stateController.stream;
     State _state = new State.initial();
 
-    Connection connection;
-
     Store() {
         dispatch.stream.listen((action) {
             final state = new State(_state, action);
@@ -20,6 +19,10 @@ class Store {
             _state = state;
         });
 
-        dispatch.add(new InitAction());
+//        dispatch.add(new InitAction());
+    }
+
+    State getState() {
+        return _state;
     }
 }

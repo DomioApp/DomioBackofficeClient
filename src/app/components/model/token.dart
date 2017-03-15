@@ -6,7 +6,7 @@ class Token {
     String id;
 
     Token.fromJsonString(String jsonString) {
-        var resp = JSON.decode(jsonString);
+        Map resp = JSON.decode(jsonString);
 
         email = resp['email'];
         token = resp['token'];
