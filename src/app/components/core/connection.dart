@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'dart:html';
 import 'dart:async';
-import 'dart:convert';
 
 import '../../config.dart';
 import '../model/payload.dart';
@@ -44,9 +44,21 @@ class Connection {
             request.setRequestHeader('Authorization', 'Bearer ${window.localStorage['token']}');
         }
 
-        request.onLoadEnd.listen((_) => dataStreamController.add(new Payload(endpoint, request.responseText)));
+        request.onLoadEnd.listen((_) => dataStreamController.add(createPayload(endpoint, request)));
 
         request.send();
+    }
+
+    Payload createPayload(endpoint, request) {
+        var data = JSON.decode(request.responseText);
+
+        if (data is List) {
+            return new Payload<List>(endpoint, data);
+        } else if (data is Map) {
+            return new Payload<Map>(endpoint, data);
+        }
+
+        return null;
     }
 
     String getUrl(Requests endpoint) {
@@ -55,6 +67,8 @@ class Connection {
             url = '/users';
         } else if (endpoint == Requests.FetchPendingDomains) {
             url = '/domains/pending';
+        } else if (endpoint == Requests.FetchApiStatus) {
+            url = '/';
         }
         else {
             throw('Endpoint must be defined.');

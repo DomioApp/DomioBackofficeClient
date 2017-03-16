@@ -4,7 +4,7 @@ import '../actions/fetch_users_action.dart';
 
 State usersReducer(State state, Action action) {
     if (action is FetchUsersAction) {
-        state.Users = action.data;
+        state.Users = action.payload;
     }
 
     return state;

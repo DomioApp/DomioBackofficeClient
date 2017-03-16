@@ -1,11 +1,12 @@
 import 'action.dart';
 import '../model/user.dart';
-import '../model/payload.dart';
 
-class FetchUsersAction extends Action {
-    List<User> data;
+class FetchUsersAction implements Action<List<User>> {
+    String type = 'FETCH_USERS_ACTION';
+    List<User> payload;
 
-    FetchUsersAction(Payload payload) {
-        data = payload.data.map((item) => new User());
+    FetchUsersAction.fromObject(List data) {
+        payload = data.map((Map userMap) => new User.fromMap(userMap));
     }
+
 }

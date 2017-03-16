@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'state.dart';
 import '../actions/action.dart';
-import '../model/payload.dart';
-import 'requests.dart';
 
 class Store {
     final StreamController<Action> dispatch = new StreamController.broadcast();

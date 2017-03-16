@@ -4,7 +4,7 @@ import '../actions/fetch_pending_domains_action.dart';
 
 State pendingDomainsReducer(State state, Action action) {
     if (action is FetchPendingDomainsAction) {
-        state.PendingDomains = action.data;
+        state.PendingDomains = action.payload;
     }
 
     return state;

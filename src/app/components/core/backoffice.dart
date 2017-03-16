@@ -13,6 +13,7 @@ import '../ui/users_area.dart';
 import '../ui/pending_domains_area.dart';
 import '../actions/fetch_users_action.dart';
 import '../actions/fetch_pending_domains_action.dart';
+import '../actions/fetch_api_status_action.dart';
 
 class Backoffice {
     DivElement mainArea;
@@ -65,14 +66,16 @@ class Backoffice {
 
 //        onMainViewLoaded.listen((bool event) => print('Main view loaded'));
 //        router.onRouteChange.listen(loadView);
-//            connection.sendRequest(Requests.GetUsers);
+//            connection.sendRequest(Requests.FetchUsers);
     }
 
     void loadData(Payload payload) {
         if (payload.endpoint == Requests.FetchPendingDomains) {
-            store.dispatch.add(new FetchPendingDomainsAction(payload));
+            store.dispatch.add(new FetchPendingDomainsAction());
         } else if (payload.endpoint == Requests.FetchUsers) {
-            store.dispatch.add(new FetchUsersAction(payload));
+            store.dispatch.add(new FetchUsersAction.fromObject(payload.data));
+        } else if (payload.endpoint == Requests.FetchApiStatus) {
+            store.dispatch.add(new FetchApiStatusAction.fromObject(payload.data));
         }
     }
 

@@ -1,15 +1,12 @@
-import 'dart:convert';
-
 import '../core/requests.dart';
 
-class Payload {
+class Payload<T> {
     Requests endpoint;
     String response;
-    List data;
+    T data;
 
-    Payload(Requests endpointInstance, String responseText) {
+    Payload(Requests endpointInstance, T data) {
         endpoint = endpointInstance;
-        response = responseText;
-        data = JSON.decode(response);
+        this.data = data;
     }
 }

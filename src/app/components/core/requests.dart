@@ -1,4 +1,5 @@
 enum Requests {
     FetchUsers,
-    FetchPendingDomains
+    FetchPendingDomains,
+    FetchApiStatus
 }
