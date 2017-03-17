@@ -8,18 +8,18 @@ import '../reducers/pending_domains_reducer.dart';
 import '../reducers/api_status_reducer.dart';
 
 class State {
-    List<User> Users;
-    List<Domain> PendingDomains;
+    List<User> users;
+    List<Domain> pendingDomains;
     ApiStatus apiStatus;
 
     State.initial() {
-        Users = new List<User>();
-        PendingDomains = new List<Domain>();
+        users = new List<User>();
+        pendingDomains = new List<Domain>();
     }
 
     State(State state, Action action) {
-        Users = usersReducer(state, action).Users;
-        PendingDomains = pendingDomainsReducer(state, action).PendingDomains;
+        users = usersReducer(state, action).users;
+        pendingDomains = pendingDomainsReducer(state, action).pendingDomains;
         apiStatus = apiStatusReducer(state, action).apiStatus;
     }
 }
