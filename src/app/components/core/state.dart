@@ -12,10 +12,11 @@ class State {
     List<Domain> pendingDomains;
     ApiStatus apiStatus;
 
-    State.initial() {
-        users = new List<User>();
-        pendingDomains = new List<Domain>();
-    }
+    State.initial()
+        :
+            users = new List<User>(),
+            pendingDomains = new List<Domain>();
+
 
     State(State state, Action action) {
         users = usersReducer(state, action).users;
